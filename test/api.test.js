@@ -30,7 +30,7 @@ describe("GET request - getRecipes() via /api/recipes", () => {
   });
 });
 
-// Does it take queries? Exlcuding one item? Excluding multiple items?
+// Does it take queries? Exlcuding one item? Excluding multiple items? Final test.
 
 // Test for 404.
 // Test for 400.
