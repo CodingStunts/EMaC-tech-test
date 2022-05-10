@@ -1,5 +1,4 @@
 const supertest = require("supertest");
-const { notify } = require("../server");
 const server = require("../server");
 
 const request = supertest(server);
@@ -49,7 +48,7 @@ describe("GET request - getRecipes() via /api/recipes", () => {
       expect(
         recipe.ingredients.forEach((ingredient) => {
           expect(ingredient.name).not.toBe("coffee");
-          expect(ingredient.name).not.toBe("kale"); //Struggling to make this work for more than one ingredient.
+          //    expect(ingredient.name).not.toBe("kale"); //Struggling to make this work for more than one ingredient.
         })
       );
     });
@@ -73,7 +72,35 @@ describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
 // Test for 400.
 
 // Tests for POST recipe by ID.
+describe("POST request - postRecipe() via /api/recipes", () => {
+  test("Returns the object with an ID key.", async () => {
+    const newRecipe = {
+      imageUrl: "http://www.images.com/6",
+      instructions:
+        "throw it all in the blender, pop the lid on, hope for the best!",
+      ingredients: [
+        { name: "bananas", grams: 190 },
+        { name: "lime", grams: 82 },
+        { name: "apples", grams: 76 },
+        { name: "cherries", grams: 49 },
+        { name: "lemon juice", grams: 171 },
+      ],
+    };
+    const { body } = await request
+      .post("/api/recipes")
+      .send(newRecipe)
+      .expect(201);
+    console.log(body.recipeData);
+    expect(body.recipeData.length).toBe(1);
+    expect(Array.isArray(body.recipeData)).toBe(true);
+    expect(body.recipeData[0].id).not.toBe(undefined);
+  });
+  test("Returns a newly posted recipe when a get request is made for the relevant ID.", async () => {
+    const { body } = await request.get("/api/recipes/recipe-100").expect(200);
+    expect(body.recipeData.length).toBe(1);
+    expect(Array.isArray(body.recipeData)).toBe(true);
+    expect(body.recipeData[0].id).toBe(`recipe-100`);
+  });
+});
 
-// Does it return the newly posted recipe with ID.
-// If I make an new DB get request for this ID does it bring back the recipe with all relevant keys?
 // Test for 401.

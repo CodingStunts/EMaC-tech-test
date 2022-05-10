@@ -1,6 +1,7 @@
 const {
   retrieveRecipes,
   retrieveRecipeByID,
+  addRecipe,
 } = require("../models/recipes.model");
 
 exports.getRecipes = (req, res) => {
@@ -26,3 +27,12 @@ exports.getRecipesByID = (req, res) => {
 };
 
 //postRecipe
+exports.postRecipe = (req, res) => {
+  addRecipe(req.body, (error, recipeData) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.status(201).send({ recipeData });
+    }
+  });
+};
