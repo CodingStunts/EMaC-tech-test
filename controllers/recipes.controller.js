@@ -1,7 +1,8 @@
 const { retrieveRecipes } = require("../models/recipes.model");
 
 exports.getRecipes = (req, res) => {
-  retrieveRecipes((error, recipeData) => {
+  const excludes = req.query;
+  retrieveRecipes(excludes, (error, recipeData) => {
     if (error) {
       console.log(error);
     } else {

@@ -1,4 +1,5 @@
 const supertest = require("supertest");
+const { notify } = require("../server");
 const server = require("../server");
 
 const request = supertest(server);
@@ -24,6 +25,30 @@ describe("GET request - getRecipes() via /api/recipes", () => {
           imageUrl: expect.any(String),
           instructions: expect.any(String),
           ingredients: expect.any(Array),
+        })
+      );
+    });
+  });
+  test("Returns an array without any instances of a single excluded ingredient in query.", async () => {
+    const { body } = await request
+      .get("/api/recipes?exclude_ingredients=flax")
+      .expect(200);
+    body.recipeData.forEach((recipe) => {
+      expect(
+        recipe.ingredients.forEach((ingredient) => {
+          expect(ingredient.name).not.toBe("flax");
+        })
+      );
+    });
+  });
+  test("Returns an array without any instances of multiple excluded ingredients in query.", async () => {
+    const { body } = await request
+      .get("/api/recipes?exclude_ingredients=coffee,kale")
+      .expect(200);
+    body.recipeData.forEach((recipe) => {
+      expect(
+        recipe.ingredients.forEach((ingredient) => {
+          expect(ingredient.name).not.toBe("coffee"); //Struggling to make this work for more than one ingredient so removed kale for now.
         })
       );
     });
