@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { filter } = require("lodash");
 
 exports.retrieveRecipes = (excludes, callback) => {
   fs.readFile("data/data.json", "utf-8", (error, data) => {
@@ -15,11 +14,22 @@ exports.retrieveRecipes = (excludes, callback) => {
           recipe.ingredients.every((item) => item.name !== excludedArr[0])
         );
 
-        console.log(filteredArray.length);
         callback(null, filteredArray);
       } else {
         callback(null, recipesArray);
       }
+    }
+  });
+};
+
+exports.retrieveRecipeByID = (id, callback) => {
+  fs.readFile("data/data.json", "utf-8", (error, data) => {
+    if (error) {
+      console.log(error);
+    } else {
+      const recipeArray = JSON.parse(data);
+      const filteredArr = recipeArray.filter((recipe) => recipe.id === id);
+      callback(null, filteredArr);
     }
   });
 };

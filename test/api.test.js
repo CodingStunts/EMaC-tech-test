@@ -48,27 +48,32 @@ describe("GET request - getRecipes() via /api/recipes", () => {
     body.recipeData.forEach((recipe) => {
       expect(
         recipe.ingredients.forEach((ingredient) => {
-          expect(ingredient.name).not.toBe("coffee"); //Struggling to make this work for more than one ingredient so removed kale for now.
+          expect(ingredient.name).not.toBe("coffee");
+          expect(ingredient.name).not.toBe("kale"); //Struggling to make this work for more than one ingredient.
         })
       );
     });
   });
 });
 
-// Does it take queries? Exlcuding one item? Excluding multiple items? Final test.
-
 // Test for 404.
 // Test for 400.
 
 // Tests for GET recipe by ID.
-// Does it return a single recipe? Array length 1.
-// Does it return a recipe with the ID in the request?
-// Does it return call relevant keys?
+describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
+  test("Returns an array with a length of 1, with a corresponding ID to the parameter ID.", async () => {
+    const { body } = await request.get("/api/recipes/recipe-5").expect(200);
+    expect(body.recipeData.length).toBe(1);
+    expect(Array.isArray(body.recipeData)).toBe(true);
+    expect(body.recipeData[0].id).toBe("recipe-5");
+  });
+});
 
 // Test for 404.
 // Test for 400.
 
 // Tests for POST recipe by ID.
+
 // Does it return the newly posted recipe with ID.
 // If I make an new DB get request for this ID does it bring back the recipe with all relevant keys?
 // Test for 401.
