@@ -11,9 +11,8 @@ exports.retrieveRecipes = (excludes, callback) => {
         const excludedArr = excluded.split(",");
 
         const filteredArray = recipesArray.filter((recipe) =>
-          recipe.ingredients.every((item) => item.name !== excludedArr[0])
+          recipe.ingredients.every((item) => !excludedArr.includes(item.name))
         );
-
         callback(null, filteredArray);
       } else {
         callback(null, recipesArray);
@@ -24,8 +23,13 @@ exports.retrieveRecipes = (excludes, callback) => {
 
 exports.retrieveRecipeByID = (id, callback) => {
   fs.readFile("data/data.json", "utf-8", (error, data) => {
-    if (error) {
-      console.log(error);
+    if (id.slice(0, 7) !== "recipe-") {
+      callback(
+        Promise.reject({
+          status: 400,
+          msg: "Your ID format seems to be wrong.",
+        })
+      );
     } else {
       const recipeArray = JSON.parse(data);
       const filteredArr = recipeArray.filter((recipe) => recipe.id === id);

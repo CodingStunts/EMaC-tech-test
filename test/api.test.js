@@ -8,7 +8,6 @@ test("/api", async () => {
   expect(body.message).toBe("ok");
 });
 
-// Tests for GET recipes.
 describe("GET request - getRecipes() via /api/recipes", () => {
   test("Returns an array with a length of 100 or more (allowing for add function later to increase this.)", async () => {
     const { body } = await request.get("/api/recipes").expect(200);
@@ -44,19 +43,17 @@ describe("GET request - getRecipes() via /api/recipes", () => {
     const { body } = await request
       .get("/api/recipes?exclude_ingredients=coffee,kale")
       .expect(200);
+
     body.recipeData.forEach((recipe) => {
       expect(
         recipe.ingredients.forEach((ingredient) => {
           expect(ingredient.name).not.toBe("coffee");
-          //    expect(ingredient.name).not.toBe("kale"); //Struggling to make this work for more than one ingredient.
+          expect(ingredient.name).not.toBe("kale");
         })
       );
     });
   });
 });
-
-// Test for 404.
-// Test for 400.
 
 // Tests for GET recipe by ID.
 describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
@@ -66,10 +63,19 @@ describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
     expect(Array.isArray(body.recipeData)).toBe(true);
     expect(body.recipeData[0].id).toBe("recipe-5");
   });
-});
 
-// Test for 404.
-// Test for 400.
+  // Test for 404.
+  test("Returns a 404 if recipe not found.", async () => {
+    const { body } = await request.get("/api/recipes/recipe-50000").expect(404);
+    expect(body.msg).toBe("There is no resource with that ID.");
+  });
+
+  // Test for 400.
+  test("Returns a 400 if ID isn't valid", async () => {
+    const { body } = await request.get("/api/recipes/pina-colada").expect(400);
+    expect(body).toBe("Your ID format seems to be wrong.");
+  });
+});
 
 // Tests for POST recipe by ID.
 describe("POST request - postRecipe() via /api/recipes", () => {
@@ -90,7 +96,6 @@ describe("POST request - postRecipe() via /api/recipes", () => {
       .post("/api/recipes")
       .send(newRecipe)
       .expect(201);
-    console.log(body.recipeData);
     expect(body.recipeData.length).toBe(1);
     expect(Array.isArray(body.recipeData)).toBe(true);
     expect(body.recipeData[0].id).not.toBe(undefined);

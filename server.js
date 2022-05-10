@@ -7,7 +7,10 @@ server.use(
   })
 );
 const apiRouter = require("./routes/api");
+const { handleCustomErrors, handleServerErrors } = require("./errors/errors");
 
 server.use("/api", apiRouter);
+server.use(handleCustomErrors);
+server.use(handleServerErrors);
 
 module.exports = server;
