@@ -1,9 +1,10 @@
 const fs = require("fs");
+const { nextTick } = require("process");
 
 exports.retrieveRecipes = (excludes, callback) => {
   fs.readFile("data/data.json", "utf-8", (error, data) => {
     if (error) {
-      console.log(error);
+      next(error);
     } else {
       const recipesArray = JSON.parse(data);
       if (excludes.exclude_ingredients) {
@@ -23,18 +24,20 @@ exports.retrieveRecipes = (excludes, callback) => {
 
 exports.retrieveRecipeByID = (id, callback) => {
   fs.readFile("data/data.json", "utf-8", (error, data) => {
-    if (id.slice(0, 7) !== "recipe-") {
-      callback(
-        Promise.reject({
+    if (error) {
+      next(error);
+    } else {
+      if (id.slice(0, 7) !== "recipe-") {
+        throw new Error({
           status: 400,
           msg: "Your ID format seems to be wrong.",
-        })
-      );
-    } else {
-      const recipeArray = JSON.parse(data);
-      const filteredArr = recipeArray.filter((recipe) => recipe.id === id);
+        });
+      } else {
+        const recipeArray = JSON.parse(data);
+        const filteredArr = recipeArray.filter((recipe) => recipe.id === id);
 
-      callback(null, filteredArr);
+        callback(null, filteredArr);
+      }
     }
   });
 };
@@ -42,7 +45,7 @@ exports.retrieveRecipeByID = (id, callback) => {
 exports.addRecipe = (newData, callback) => {
   fs.readFile("data/data.json", "utf-8", (error, data) => {
     if (error) {
-      console.log(error);
+      next(error);
     } else {
       const recipeArray = JSON.parse(data);
       const newRecipe = { ...newData };

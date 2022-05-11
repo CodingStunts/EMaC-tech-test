@@ -19,6 +19,7 @@ exports.getRecipesByID = (req, res, next) => {
   const { id } = req.params;
   retrieveRecipeByID(id, (error, recipeData) => {
     if (error) {
+      console.log(error);
       next(error);
     } else {
       res.status(200).send({ recipeData });

@@ -55,7 +55,6 @@ describe("GET request - getRecipes() via /api/recipes", () => {
   });
 });
 
-// Tests for GET recipe by ID.
 describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
   test("Returns an array with a length of 1, with a corresponding ID to the parameter ID.", async () => {
     const { body } = await request.get("/api/recipes/recipe-5").expect(200);
@@ -64,20 +63,17 @@ describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
     expect(body.recipeData[0].id).toBe("recipe-5");
   });
 
-  // Test for 404.
   test("Returns a 404 if recipe not found.", async () => {
     const { body } = await request.get("/api/recipes/recipe-50000").expect(404);
     expect(body.msg).toBe("There is no resource with that ID.");
   });
 
-  // Test for 400.
   test("Returns a 400 if ID isn't valid", async () => {
     const { body } = await request.get("/api/recipes/pina-colada").expect(400);
     expect(body).toBe("Your ID format seems to be wrong.");
   });
 });
 
-// Tests for POST recipe by ID.
 describe("POST request - postRecipe() via /api/recipes", () => {
   test("Returns the object with an ID key.", async () => {
     const newRecipe = {
@@ -107,5 +103,3 @@ describe("POST request - postRecipe() via /api/recipes", () => {
     expect(body.recipeData[0].id).toBe(`recipe-100`);
   });
 });
-
-// Test for 401.
