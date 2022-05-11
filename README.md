@@ -2,7 +2,7 @@
 
 ## How it works
 
-This server will allow GET requests on `api/recipes` and `api/recipes/recipe-?` with the `?` being a number from 0 to 99, plus any additionally posted recipes that have been added on POST `api/recipes` since it was completed, eg recipe-105. If you would like to make requests on this server I did so using Insomnia.
+This server will allow GET requests on `api/recipes` and `api/recipes/recipe-?` with the `?` being a number from 0 to 99, plus any additionally posted recipes that have been added on POST `api/recipes` since it was completed, eg recipe-105. If you would like to make requests on this server I did so using Insomnia, using `localhost:9090/api`.
 
 ## My development choices
 
