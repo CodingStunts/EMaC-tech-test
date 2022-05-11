@@ -6,9 +6,9 @@ const {
 
 exports.getRecipes = (req, res, next) => {
   const excludes = req.query;
-  retrieveRecipes(excludes, (error, recipeData) => {
-    if (error) {
-      next(error);
+  retrieveRecipes(excludes, (err, recipeData) => {
+    if (err) {
+      next(err);
     } else {
       res.status(200).send({ recipeData });
     }
@@ -17,10 +17,9 @@ exports.getRecipes = (req, res, next) => {
 
 exports.getRecipesByID = (req, res, next) => {
   const { id } = req.params;
-  retrieveRecipeByID(id, (error, recipeData) => {
-    if (error) {
-      console.log(error);
-      next(error);
+  retrieveRecipeByID(id, (err, recipeData) => {
+    if (err) {
+      next(err);
     } else {
       res.status(200).send({ recipeData });
     }
@@ -28,9 +27,9 @@ exports.getRecipesByID = (req, res, next) => {
 };
 
 exports.postRecipe = (req, res, next) => {
-  addRecipe(req.body, (error, recipeData) => {
-    if (error) {
-      next(error);
+  addRecipe(req.body, (err, recipeData) => {
+    if (err) {
+      next(err);
     } else {
       res.status(201).send({ recipeData });
     }
