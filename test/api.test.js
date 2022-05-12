@@ -63,8 +63,6 @@ describe("GET request - getRecipesByID() via /api/recipes/:id", () => {
     expect(body.recipeData[0].id).toBe("recipe-5");
   });
 
-  //More notes regarding this in README. Struggled to get error handling working on this and ran out of time.
-
   test("Returns a 404 if recipe not found.", async () => {
     const { text } = await request.get("/api/recipes/recipe-50000").expect(404);
     expect(text).toBe("No resources found for that ID number.");
