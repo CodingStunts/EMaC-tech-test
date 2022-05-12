@@ -3,7 +3,7 @@ const fs = require("fs");
 exports.retrieveRecipes = (excludes, callback) => {
   fs.readFile("data/data.json", "utf-8", (err, data) => {
     if (err) {
-      next(err);
+      callback(err);
     } else {
       const recipesArray = JSON.parse(data);
       if (excludes.exclude_ingredients) {
@@ -24,10 +24,10 @@ exports.retrieveRecipes = (excludes, callback) => {
 exports.retrieveRecipeByID = (id, callback) => {
   fs.readFile("data/data.json", "utf-8", (err, data) => {
     if (err) {
-      next(err);
+      callback(err);
     } else {
       if (id.slice(0, 7) !== "recipe-") {
-        throw new Error({
+        callback({
           status: 400,
           msg: "Your ID format seems to be wrong.",
         });
@@ -38,7 +38,7 @@ exports.retrieveRecipeByID = (id, callback) => {
         if (filteredArr.length === 1) {
           callback(null, filteredArr);
         } else {
-          throw new Error({
+          callback({
             status: 404,
             msg: "No resources found for that ID number.",
           });
@@ -51,7 +51,7 @@ exports.retrieveRecipeByID = (id, callback) => {
 exports.addRecipe = (newData, callback) => {
   fs.readFile("data/data.json", "utf-8", (err, data) => {
     if (err) {
-      next(err);
+      callback(err);
     } else {
       const recipeArray = JSON.parse(data);
       const newRecipe = { ...newData };
@@ -64,7 +64,7 @@ exports.addRecipe = (newData, callback) => {
         JSON.stringify(updatedJSON),
         function (err) {
           if (err) {
-            next(err);
+            callback(err);
           }
         }
       );

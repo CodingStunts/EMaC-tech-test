@@ -29,7 +29,7 @@ exports.getRecipesByID = (req, res, next) => {
 exports.postRecipe = (req, res, next) => {
   addRecipe(req.body, (err, recipeData) => {
     if (err) {
-      next(error);
+      next(err);
     } else {
       res.status(201).send({ recipeData });
     }
